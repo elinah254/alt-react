@@ -1,31 +1,17 @@
-import { useState } from 'react';
-import AddTodo from './components/AddTodo';
-import TodoList from './components/TodoList';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import TodoDetail from './pages/TodoDetail';
+import NotFound from './pages/NotFound';
 
 function App() {
-  const [todos, setTodos] = useState([]);
-
-  const addTodo = (text) => {
-    const newTodo = { id: Date.now(), text, completed: false };
-    setTodos([newTodo, ...todos]);
-  };
-
-  const toggleTodo = (id) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
-  };
-
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
-
   return (
-    <div className="p-4 max-w-xl mx-auto text-white">
-      <h1 className="text-2xl font-bold mb-4">Todo App</h1>
-      <AddTodo onAdd={addTodo} />
-      <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
-    </div>
+    <main className="p-4 max-w-3xl mx-auto text-white">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/todos/:id" element={<TodoDetail />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </main>
   );
 }
 

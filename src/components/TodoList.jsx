@@ -1,15 +1,26 @@
-import TodoItem from './TodoItem';
-
 function TodoList({ todos, onToggle, onDelete }) {
   return (
-    <ul>
-      {todos.map(todo => (
-        <TodoItem
+    <ul className="space-y-2">
+      {todos.map((todo) => (
+        <li
           key={todo.id}
-          todo={todo}
-          onToggle={() => onToggle(todo.id)}
-          onDelete={() => onDelete(todo.id)}
-        />
+          className="flex justify-between items-center p-2 bg-gray-800 rounded"
+        >
+          <span
+            className={`cursor-pointer ${todo.completed ? 'line-through text-gray-400' : ''}`}
+            onClick={() => onToggle && onToggle(todo.id)}
+          >
+            {todo.text || todo.title}
+          </span>
+          {onDelete && (
+            <button
+              className="text-red-400 hover:text-red-600"
+              onClick={() => onDelete(todo.id)}
+            >
+              ❌
+            </button>
+          )}
+        </li>
       ))}
     </ul>
   );
