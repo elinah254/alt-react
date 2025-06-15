@@ -1,15 +1,13 @@
-function TodoItem({ todo, onToggle, onDelete }) {
+import styles from '../styles/TodoItem.module.css';
+import { Link } from 'react-router-dom';
+
+function TodoItem({ todo }) {
   return (
-    <li className="flex justify-between items-center p-2 bg-gray-800 border border-gray-700 mb-2 rounded">
-      <span
-        onClick={onToggle}
-        className={`cursor-pointer flex-grow ${todo.completed ? 'line-through text-gray-400' : ''}`}
-      >
-        {todo.text}
-      </span>
-      <button onClick={onDelete} className="ml-2 text-red-500 hover:text-red-300">
-        ✕
-      </button>
+    <li className={styles.item}>
+      <Link to={`/todos/${todo.id}`}>
+        <input type="checkbox" checked={todo.completed} readOnly />
+        <span>{todo.title}</span>
+      </Link>
     </li>
   );
 }

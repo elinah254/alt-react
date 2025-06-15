@@ -1,19 +1,33 @@
-import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { fetchTodos } from '../lib/api';
 import TodoList from '../components/TodoList';
 import Pagination from '../components/Pagination';
+import AddTodo from '../components/AddTodo';
 
 function Home() {
   const [page, setPage] = useState(1);
-  const { data: todos = [], isLoading, isError } = useQuery(['todos', page], () => fetchTodos(page));
+  const [localTodos, setLocalTodos] = useState([]);
+  const { data: remoteTodos = [], isLoading, isError } = useQuery(['todos', page], () => fetchTodos(page));
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
-  if (isError) return <p className="text-center text-red-500">Error fetching todos</p>;
+  const handleAddTodo = (text) => {
+    const newTodo = {
+      id: Date.now(),
+      title: text,
+      completed: false
+    };
+    setLocalTodos([newTodo, ...localTodos]);
+  };
+
+  const todos = [...localTodos, ...remoteTodos];
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error fetching todos</p>;
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Todos</h1>
+    <div style={{ padding: '1rem', maxWidth: '600px', margin: '0 auto' }}>
+      <h1>Todo App</h1>
+      <AddTodo onAdd={handleAddTodo} />
       <TodoList todos={todos} />
       <Pagination page={page} setPage={setPage} />
     </div>
