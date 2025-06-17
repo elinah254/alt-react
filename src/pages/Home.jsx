@@ -1,23 +1,3 @@
-// import { useState } from 'react';
-// import { useQuery } from '@tanstack/react-query';
-// import { fetchTodos } from '../lib/api';
-// import TodoList from '../components/TodoList';
-// import Pagination from '../components/Pagination';
-// import AddTodo from '../components/AddTodo';
-
-// function Home() {
-//   return (
-//     <div style={{ padding: '1rem', maxWidth: '600px', margin: '0 auto' }}>
-//       <h1>Todo App</h1>
-//       <AddTodo onAdd={() => {}} /> 
-//        <TodoList todos={[]} /> 
-//        <Pagination page={1} setPage={() => {}} /> 
-//     </div>
-//   );
-// }
-
-// export default Home;
-
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchTodos } from '../lib/api';
@@ -42,7 +22,9 @@ function Home() {
     data: remoteTodos = [],
     isLoading,
     isError,
-  } = useQuery(['todos', page], () => fetchTodos(page), {
+  } = useQuery({
+    queryKey: ['todos', page],
+    queryFn: () => fetchTodos(page),
     keepPreviousData: true,
   });
 
