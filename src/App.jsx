@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import TodoDetail from './pages/TodoDetail';
 import NotFound from './pages/NotFound';
+import BrokenPage from './pages/BrokenPage'; 
 
 function App() {
   return (
