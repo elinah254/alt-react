@@ -44,6 +44,21 @@ function Home() {
     setLocalTodos((prev) => [newTodo, ...prev]);
   };
 
+  const handleToggleComplete = (id) => {
+    setLocalTodos(prev =>
+      prev.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
+  const handleDeleteTodo = (id) => {
+    const confirmDelete = confirm("Are you sure you want to delete this todo?");
+    if (confirmDelete) {
+      setLocalTodos(prev => prev.filter(todo => todo.id !== id));
+    }
+  };
+
   const combinedTodos = [...localTodos, ...remoteTodos];
 
   const filteredTodos = combinedTodos.filter(todo => {
@@ -85,7 +100,12 @@ function Home() {
         </select>
       </div>
 
-      <TodoList todos={filteredTodos} />
+      <TodoList
+        todos={filteredTodos}
+        onToggleComplete={handleToggleComplete}
+        onDelete={handleDeleteTodo}
+      />
+
       <Pagination page={page} setPage={setPage} />
     </main>
   );
