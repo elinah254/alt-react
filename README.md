@@ -99,20 +99,7 @@ npm run dev
 * `npm run build` – Build for production
 * `npm run preview` – Preview production build
 
-## 📸 Screenshots
 
-*Add screenshots or GIFs here using markdown image syntax:*
-
-```markdown
-![Todo List](./screenshots/todo-list.png)
-```
-
-
-## 📌 Future Improvements
-
-* Persist todos to a backend or Firebase
-* Add dark mode
-* Add user authentication
 
 ## 🙏 Acknowledgments
 
