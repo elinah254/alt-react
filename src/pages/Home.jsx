@@ -18,6 +18,9 @@ function Home() {
     }
   });
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+
   const {
     data: remoteTodos = [],
     isLoading,
@@ -41,9 +44,16 @@ function Home() {
     setLocalTodos((prev) => [newTodo, ...prev]);
   };
 
-  const todos = [...localTodos, ...remoteTodos];
+  const combinedTodos = [...localTodos, ...remoteTodos];
 
-  console.log("Todos:", todos);
+  const filteredTodos = combinedTodos.filter(todo => {
+    const matchesSearch = todo.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === 'all' ||
+      (statusFilter === 'completed' && todo.completed) ||
+      (statusFilter === 'incomplete' && !todo.completed);
+    return matchesSearch && matchesStatus;
+  });
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error fetching todos</p>;
@@ -51,8 +61,31 @@ function Home() {
   return (
     <main style={{ padding: '1rem', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Todo App</h1>
+
       <AddTodo onAdd={handleAddTodo} />
-      <TodoList todos={todos} />
+
+      {/* Search and Filter UI */}
+      <div style={{ marginBottom: '1rem' }}>
+        <input
+          type="text"
+          placeholder="Search todos..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ padding: '0.5rem', width: '100%', marginBottom: '0.5rem' }}
+        />
+
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          style={{ padding: '0.5rem', width: '100%' }}
+        >
+          <option value="all">All</option>
+          <option value="completed">Completed</option>
+          <option value="incomplete">Incomplete</option>
+        </select>
+      </div>
+
+      <TodoList todos={filteredTodos} />
       <Pagination page={page} setPage={setPage} />
     </main>
   );
