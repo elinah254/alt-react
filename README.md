@@ -32,7 +32,7 @@ A comprehensive Todo App built with **React 19**, demonstrating routing, API int
 ```bash
 mytodo-app/
 ├── public/
-│   └── index.html
+│   └── favicon.ico
 ├── src/
 │   ├── assets/
 │   ├── components/
