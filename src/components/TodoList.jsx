@@ -1,7 +1,7 @@
 import TodoItem from './TodoItem';
 import styles from '../styles/TodoList.module.css';
 
-function TodoList({ todos, onToggleComplete, onDelete }) {
+function TodoList({ todos, onToggleComplete, onDelete, onEdit }) {
   return (
     <ul className={styles.list}>
       {todos.map(todo => (
@@ -10,6 +10,7 @@ function TodoList({ todos, onToggleComplete, onDelete }) {
           todo={todo}
           onToggleComplete={onToggleComplete}
           onDelete={onDelete}
+          onEdit={onEdit} // ✅ This line was missing
         />
       ))}
     </ul>
@@ -17,3 +18,4 @@ function TodoList({ todos, onToggleComplete, onDelete }) {
 }
 
 export default TodoList;
+

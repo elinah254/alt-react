@@ -1,24 +1,22 @@
 import { useState } from 'react';
 import styles from '../styles/TodoItem.module.css';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify'; // ✅ Toast import
 
 function TodoItem({ todo, onToggleComplete, onDelete, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(todo.title);
-  const [editedDescription, setEditedDescription] = useState(todo.description || '');
+  const [editTitle, setEditTitle] = useState(todo.title);
+  const [editDescription, setEditDescription] = useState(todo.description || '');
 
   const handleSave = () => {
-    if (!editedTitle.trim()) return;
-    onEdit(todo.id, {
-      title: editedTitle.trim(),
-      description: editedDescription.trim(),
-    });
-    setIsEditing(false);
-  };
+    if (!editTitle.trim()) return;
 
-  const handleCancel = () => {
-    setEditedTitle(todo.title);
-    setEditedDescription(todo.description || '');
+    onEdit(todo.id, {
+      title: editTitle.trim(),
+      description: editDescription.trim(),
+    });
+
+    toast.success('Todo updated successfully!'); // ✅ Toast call
     setIsEditing(false);
   };
 
@@ -32,22 +30,19 @@ function TodoItem({ todo, onToggleComplete, onDelete, onEdit }) {
         />
 
         {isEditing ? (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className={styles.editArea}>
             <input
-              type="text"
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
               className={styles.editInput}
+              placeholder="Edit title"
             />
-            <textarea
-              value={editedDescription}
-              onChange={(e) => setEditedDescription(e.target.value)}
-              className={styles.editTextarea}
+            <input
+              value={editDescription}
+              onChange={(e) => setEditDescription(e.target.value)}
+              className={styles.editInput}
+              placeholder="Edit description"
             />
-            <div className={styles.editActions}>
-              <button onClick={handleSave} className={styles.saveButton}>Save</button>
-              <button onClick={handleCancel} className={styles.cancelButton}>Cancel</button>
-            </div>
           </div>
         ) : (
           <div>
@@ -62,22 +57,18 @@ function TodoItem({ todo, onToggleComplete, onDelete, onEdit }) {
       </div>
 
       <div className={styles.actions}>
-        {!isEditing && (
-          <button
-            onClick={() => setIsEditing(true)}
-            className={styles.editButton}
-          >
+        {isEditing ? (
+          <button className={styles.saveButton} onClick={handleSave}>
+            Save
+          </button>
+        ) : (
+          <button className={styles.editButton} onClick={() => setIsEditing(true)}>
             Edit
           </button>
         )}
-        {onDelete && (
-          <button
-            className={styles.deleteButton}
-            onClick={() => onDelete(todo.id)}
-          >
-            Delete
-          </button>
-        )}
+        <button className={styles.deleteButton} onClick={() => onDelete(todo.id)}>
+          Delete
+        </button>
       </div>
     </li>
   );

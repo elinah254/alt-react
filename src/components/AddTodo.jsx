@@ -2,28 +2,39 @@ import { useState } from 'react';
 import styles from '../styles/AddTodo.module.css';
 
 function AddTodo({ onAdd }) {
-  const [text, setText] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!text.trim()) return;
-    onAdd(text);
-    setText('');
+    if (!title.trim()) return;
+
+    onAdd({ title: title.trim(), description: description.trim() });
+    setTitle('');
+    setDescription('');
   };
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <input
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
         className={styles.input}
-        placeholder="Add a new todo..."
+        placeholder="Todo title"
       />
-      <button className={styles.button}>Add</button>
+      <input
+        type="text"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className={styles.input}
+        placeholder="Description"
+      />
+      <button type="submit" className={styles.button}>
+        Add
+      </button>
     </form>
   );
 }
 
 export default AddTodo;
-
-

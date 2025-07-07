@@ -4,6 +4,7 @@ import { fetchTodos } from '../lib/api';
 import TodoList from '../components/TodoList';
 import Pagination from '../components/Pagination';
 import AddTodo from '../components/AddTodo';
+import { toast } from 'react-toastify';
 
 function Home() {
   const [page, setPage] = useState(1);
@@ -43,6 +44,7 @@ function Home() {
       completed: false,
     };
     setLocalTodos((prev) => [newTodo, ...prev]);
+    toast.success('New todo added!');
   };
 
   const handleToggleComplete = (id) => {
@@ -57,6 +59,7 @@ function Home() {
     const confirmDelete = confirm("Are you sure you want to delete this todo?");
     if (confirmDelete) {
       setLocalTodos(prev => prev.filter(todo => todo.id !== id));
+      toast.info('Todo deleted');
     }
   };
 
@@ -66,6 +69,7 @@ function Home() {
         todo.id === id ? { ...todo, ...updatedData } : todo
       )
     );
+    toast.success('Todo updated!');
   };
 
   const combinedTodos = [...localTodos, ...remoteTodos];
@@ -88,7 +92,7 @@ function Home() {
 
       <AddTodo onAdd={handleAddTodo} />
 
-      {/* Search and Filter UI */}
+      {/* Search and Filter */}
       <div style={{ marginBottom: '1rem' }}>
         <input
           type="text"
@@ -97,7 +101,6 @@ function Home() {
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ padding: '0.5rem', width: '100%', marginBottom: '0.5rem' }}
         />
-
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
