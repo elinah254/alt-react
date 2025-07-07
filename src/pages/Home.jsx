@@ -13,7 +13,7 @@ function Home() {
       const stored = localStorage.getItem('localTodos');
       return stored ? JSON.parse(stored) : [];
     } catch (error) {
-      console.error("Failed to parse localTodos:", error);
+      console.error('Failed to parse localTodos:', error);
       localStorage.removeItem('localTodos');
       return [];
     }
@@ -48,24 +48,33 @@ function Home() {
   };
 
   const handleToggleComplete = (id) => {
-    setLocalTodos(prev =>
-      prev.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    const todoToUpdate = localTodos.find((todo) => todo.id === id);
+    if (!todoToUpdate) return;
+
+    const updatedCompleted = !todoToUpdate.completed;
+
+    setLocalTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, completed: updatedCompleted } : todo
       )
+    );
+
+    toast.info(
+      updatedCompleted ? 'Marked as completed ✅' : 'Marked as incomplete ⏳'
     );
   };
 
   const handleDeleteTodo = (id) => {
-    const confirmDelete = confirm("Are you sure you want to delete this todo?");
+    const confirmDelete = confirm('Are you sure you want to delete this todo?');
     if (confirmDelete) {
-      setLocalTodos(prev => prev.filter(todo => todo.id !== id));
+      setLocalTodos((prev) => prev.filter((todo) => todo.id !== id));
       toast.info('Todo deleted');
     }
   };
 
   const handleEditTodo = (id, updatedData) => {
-    setLocalTodos(prev =>
-      prev.map(todo =>
+    setLocalTodos((prev) =>
+      prev.map((todo) =>
         todo.id === id ? { ...todo, ...updatedData } : todo
       )
     );
@@ -74,8 +83,10 @@ function Home() {
 
   const combinedTodos = [...localTodos, ...remoteTodos];
 
-  const filteredTodos = combinedTodos.filter(todo => {
-    const matchesSearch = todo.title.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredTodos = combinedTodos.filter((todo) => {
+    const matchesSearch = todo.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const matchesStatus =
       statusFilter === 'all' ||
       (statusFilter === 'completed' && todo.completed) ||
@@ -92,7 +103,6 @@ function Home() {
 
       <AddTodo onAdd={handleAddTodo} />
 
-      {/* Search and Filter */}
       <div style={{ marginBottom: '1rem' }}>
         <input
           type="text"
