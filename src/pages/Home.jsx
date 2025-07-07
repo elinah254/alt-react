@@ -5,6 +5,7 @@ import TodoList from '../components/TodoList';
 import Pagination from '../components/Pagination';
 import AddTodo from '../components/AddTodo';
 import { toast } from 'react-toastify';
+//import { ThemeContext } from '../components/ThemeContext';
 
 function Home() {
   const [page, setPage] = useState(1);
