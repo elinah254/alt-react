@@ -35,10 +35,11 @@ function Home() {
     localStorage.setItem('localTodos', JSON.stringify(localTodos));
   }, [localTodos]);
 
-  const handleAddTodo = (text) => {
+  const handleAddTodo = ({ title, description }) => {
     const newTodo = {
       id: Date.now(),
-      title: text,
+      title,
+      description,
       completed: false,
     };
     setLocalTodos((prev) => [newTodo, ...prev]);
@@ -57,6 +58,14 @@ function Home() {
     if (confirmDelete) {
       setLocalTodos(prev => prev.filter(todo => todo.id !== id));
     }
+  };
+
+  const handleEditTodo = (id, updatedData) => {
+    setLocalTodos(prev =>
+      prev.map(todo =>
+        todo.id === id ? { ...todo, ...updatedData } : todo
+      )
+    );
   };
 
   const combinedTodos = [...localTodos, ...remoteTodos];
@@ -104,6 +113,7 @@ function Home() {
         todos={filteredTodos}
         onToggleComplete={handleToggleComplete}
         onDelete={handleDeleteTodo}
+        onEdit={handleEditTodo}
       />
 
       <Pagination page={page} setPage={setPage} />
